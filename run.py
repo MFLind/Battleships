@@ -72,6 +72,19 @@ class Board():
     def getPos(self, x, y):
         return (self.board[y * BOARD_MAX_X + x].getVal())
 
+    def fire(self, x, y):
+        i = x + (y * BOARD_MAX_Y)
+        if (self.board[i].isEmpty):
+            self.board[i] = Boom(x, y)
+            return (FIRE_MISSED)
+        else:
+            if (self.board[i].isHit):
+                return (FIRE_DOUBLE)
+            else:
+                self.board[i].isHit = True
+                self.shipCount -= 1
+                return (FIRE_HIT)
+
     def show(self):
         print("  0 1 2 3 4 5 6 7")
         for y in range(BOARD_MAX_Y):
@@ -120,6 +133,51 @@ class Game():
             if (i >= MAX_SHIPS):
                 break
 
+    def playerFire(self):
+        while(True):
+            print("Fire your cannon: ")
+            try:
+                x = int(input("X = "))
+                if (x >= BOARD_MAX_X or x < 0):
+                    print("Out of range value")
+                    continue
+                y = int(input("Y = "))
+                if (y >= BOARD_MAX_Y or y < 0):
+                    print("Out of range value")
+                    continue
+            except ValueError:
+                print("Incorrect value should be a number")
+                continue
+
+            ret = self.computerBoard.fire(x, y)
+
+            if (ret == FIRE_MISSED):
+                print(f"{self.playerBoard.name} Missed BOOM")
+                return
+            elif (ret == FIRE_HIT):
+                print(f"{self.playerBoard.name} Hit Bang")
+                return
+            else:
+                print("Double hit.....")
+                continue
+
+    def computerFire(self):
+        while (True):
+            ss = random.randint(0, ((BOARD_MAX_X*BOARD_MAX_Y)-1))
+            x = ss % BOARD_MAX_Y
+            y = ss // BOARD_MAX_Y
+            ret = self.playerBoard.fire(x, y)
+            if (ret == FIRE_MISSED):
+                print("Computer Missed BOOM")
+                return
+            elif (ret == FIRE_HIT):
+                print("Computer Hit Bang")
+                return
+            else:
+                print("Double hit.....")
+                continue
+
+
 def main():
 
     print("=================================")
@@ -128,7 +186,17 @@ def main():
 
     myGame = Game()
     myGame.playerShipPlacement()
-
+    while(True):
+        print("------------------------------------------------")
+        myGame.show()
+        myGame.playerFire()
+        if (myGame.computerBoard.shipCount <= 0):
+            print("Player Wins!!!!")
+            break
+        myGame.computerFire()
+        if (myGame.playerBoard.shipCount <= 0):
+            print("Computer Wins!!!!")
+            break
 
 if __name__ == "__main__":
     main()
