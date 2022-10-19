@@ -22,6 +22,30 @@ class BoardCell():
         """Get cell value"""
         return '.'
 
+    def get_x(self):
+        """Get X value"""
+        return self.x_pos
+
+    def set_x(self, x_pos):
+        """Set X value"""
+        self.x_pos = x_pos
+
+    def get_y(self):
+        """Get Y value"""
+        return self.y_pos
+
+    def set_y(self, y_pos):
+        """Set Y value"""
+        self.y_pos = y_pos
+
+    def get_is_empty(self):
+        """Get Empty value"""
+        return self.is_empty
+
+    def set_empty(self, value):
+        """Set Empty value"""
+        self.is_empty = value
+
 class Ship(BoardCell):
     """Ship subclass"""
     def __init__(self, x_pos, y_pos):
@@ -54,18 +78,19 @@ class Board():
         self.ship_count = 0
         self.is_computer = False
 
+        # Setup board
         for y_pos in range(BOARD_MAX_Y):
             for x_pos in range(BOARD_MAX_X):
                 self.board.append(BoardCell(x_pos, y_pos))
 
         if name == "Computer":
             self.is_computer = True
-            # Random Board for computer
+            # Random Board for computer, get array of positions
             i = random.sample(range(0, ((BOARD_MAX_X*BOARD_MAX_Y)-1)), MAX_SHIPS)
-            for i in range(MAX_SHIPS):
-                x_pos = i[i] % BOARD_MAX_Y
-                y_pos = i[i] // BOARD_MAX_Y
-                self.board[i[i]] = Ship(x_pos, y_pos)
+            for j in range(MAX_SHIPS):
+                x_pos = i[j] % BOARD_MAX_Y
+                y_pos = i[j] // BOARD_MAX_Y
+                self.board[i[j]] = Ship(x_pos, y_pos)
                 self.ship_count += 1
 
     def add_ship(self, x_pos, y_pos):
