@@ -87,15 +87,16 @@ class Board():
         if self.board[i].is_empty:
             self.board[i] = Boom(x_pos, y_pos)
             return FIRE_MISSED
-        else:
-            if self.board[i].is_hit:
-                return FIRE_DOUBLE
-            else:
-                self.board[i].is_hit = True
-                self.ship_count -= 1
-                return FIRE_HIT
+
+        if self.board[i].is_hit:
+            return FIRE_DOUBLE
+
+        self.board[i].is_hit = True
+        self.ship_count -= 1
+        return FIRE_HIT
 
     def show(self):
+        """Display play field"""
         print("  0 1 2 3 4 5 6 7")
         for y_pos in range(BOARD_MAX_Y):
             line = str(y_pos) + " "
@@ -107,18 +108,21 @@ class Board():
             print(line)
 
 class Game():
+    """Main game class"""
     def __init__(self):
         name = input("Enter your name: ")
         self.plyer_board = Board(name)
         self.computer_board = Board('Computer')
 
     def show(self):
+        """Display both computer and players play field"""
         print(f"{self.plyer_board.name} Board:")
         self.plyer_board.show()
         print(f"{self.computer_board.name} Board:")
         self.computer_board.show()
 
     def player_ship_placement(self):
+        """Player setup playfield"""
         i = 0
         while True:
             print("Please place your ships: ")
@@ -145,6 +149,7 @@ class Game():
                 break
 
     def player_fire(self):
+        """Player fire"""
         while True:
             print("Fire your cannon: ")
             try:
@@ -163,33 +168,31 @@ class Game():
             ret = self.computer_board.fire(x_pos, y_pos)
 
             if ret == FIRE_MISSED:
-                print(f"{self.plyer_board.name} Miied BOOM")
+                print(f"{self.plyer_board.name} Missed BOOM")
                 return
-            elif ret == FIRE_HIT:
+            if ret == FIRE_HIT:
                 print(f"{self.plyer_board.name} Hit Bang")
                 return
-            else:
-                print("Double hit.....")
-                continue
+            print("Double hit.....")
 
     def computer_fire(self):
+        """Computer fire"""
         while True:
             i = random.randint(0, ((BOARD_MAX_X*BOARD_MAX_Y)-1))
             x_pos = i % BOARD_MAX_Y
             y_pos = i // BOARD_MAX_Y
             ret = self.plyer_board.fire(x_pos, y_pos)
             if ret == FIRE_MISSED:
-                print("Computer Miied BOOM")
+                print("Computer Missed BOOM")
                 return
-            elif ret == FIRE_HIT:
+            if ret == FIRE_HIT:
                 print("Computer Hit Bang")
                 return
-            else:
-                print("Double hit.....")
-                continue
+            print("Double hit.....")
 
 
 def main():
+    """Main function"""
 
     print("=================================")
     print("- = *       Battleship      * = -")
