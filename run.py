@@ -135,7 +135,7 @@ class Board():
 class Game():
     """Main game class"""
     def __init__(self):
-        name = input("Enter your name: ")
+        name = input("Enter your name: \n")
         self.plyer_board = Board(name)
         self.computer_board = Board('Computer')
 
@@ -154,11 +154,11 @@ class Game():
             self.plyer_board.show()
             print(f"Ship {i+1} of {MAX_SHIPS}")
             try:
-                x_pos = int(input("X = "))
+                x_pos = int(input("X = \n"))
                 if (x_pos >= BOARD_MAX_X or x_pos < 0):
                     print("Out of range value")
                     continue
-                y_pos = int(input("Y = "))
+                y_pos = int(input("Y = \n"))
                 if (y_pos >= BOARD_MAX_Y or y_pos < 0):
                     print("Out of range value")
                     continue
@@ -178,11 +178,11 @@ class Game():
         while True:
             print("Fire your cannon: ")
             try:
-                x_pos = int(input("X = "))
+                x_pos = int(input("X = \n"))
                 if (x_pos >= BOARD_MAX_X or x_pos < 0):
                     print("Out of range value")
                     continue
-                y_pos = int(input("Y = "))
+                y_pos = int(input("Y = \n"))
                 if (y_pos >= BOARD_MAX_Y or y_pos < 0):
                     print("Out of range value")
                     continue
