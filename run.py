@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Battleship game"""
 import random
 
 BOARD_MAX_X = 8
@@ -11,166 +12,176 @@ FIRE_DOUBLE = -1
 FIRE_HIT = 1
 
 class BoardCell():
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.isEmpty = True
+    """Board cell parent class"""
+    def __init__(self, x_pos, y_pos):
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.is_empty = True
 
-    def getVal(self):
-        return ('.')
+    def get_val(self):
+        """Get cell value"""
+        return '.'
 
 class Ship(BoardCell):
-    def __init__(self, x, y):
-        super().__init__(x, y)
-        self.isHit = False
-        self.isEmpty = False
+    """Ship subclass"""
+    def __init__(self, x_pos, y_pos):
+        super().__init__(x_pos, y_pos)
+        self.is_hit = False
+        self.is_empty = False
 
-    def getVal(self):
-        if (self.isHit):
-            return ('@')
-        else:
-            return ('X')
+    def get_val(self):
+        """Get cell value, return hit or ship symbol"""
+        if self.is_hit:
+            return '@'
+        return 'X'
 
 class Boom(BoardCell):
-    def __init__(self, x, y):
-        super().__init__(x, y)
-        self.isHit = True
-        self.isEmpty = False
+    """Boom subclass of board cell"""
+    def __init__(self, x_pos, y_pos):
+        super().__init__(x_pos, y_pos)
+        self.is_hit = True
+        self.is_empty = False
 
-    def getVal(self):
-        return ('b')
+    def get_val(self):
+        """Get cell value, return boom symbol"""
+        return 'b'
 
 class Board():
+    """Game Board plan"""
     def __init__(self, name):
         self.board = []
         self.name = name
-        self.shipCount = 0
-        self.isComputer = False
+        self.ship_count = 0
+        self.is_computer = False
 
-        for y in range(BOARD_MAX_Y):
-            for x in range(BOARD_MAX_X):
-                self.board.append(BoardCell(x, y))
+        for y_pos in range(BOARD_MAX_Y):
+            for x_pos in range(BOARD_MAX_X):
+                self.board.append(BoardCell(x_pos, y_pos))
 
-        if (name == "Computer"):
-            self.isComputer = True
+        if name == "Computer":
+            self.is_computer = True
             # Random Board for computer
-            ss = random.sample(range(0, ((BOARD_MAX_X*BOARD_MAX_Y)-1)), MAX_SHIPS)
+            i = random.sample(range(0, ((BOARD_MAX_X*BOARD_MAX_Y)-1)), MAX_SHIPS)
             for i in range(MAX_SHIPS):
-                x = ss[i] % BOARD_MAX_Y
-                y = ss[i] // BOARD_MAX_Y
-                self.board[ss[i]] = Ship(x, y)
-                self.shipCount += 1
+                x_pos = i[i] % BOARD_MAX_Y
+                y_pos = i[i] // BOARD_MAX_Y
+                self.board[i[i]] = Ship(x_pos, y_pos)
+                self.ship_count += 1
 
-    def addShip(self, x, y):
-        i = x + (y * BOARD_MAX_Y)
-        if (self.board[i].isEmpty):
-            self.board[i] = Ship(x, y)
-            self.shipCount += 1
-            return (True)
-        return (False)
+    def add_ship(self, x_pos, y_pos):
+        """Add ship to game board"""
+        i = x_pos + (y_pos * BOARD_MAX_Y)
+        if self.board[i].is_empty:
+            self.board[i] = Ship(x_pos, y_pos)
+            self.ship_count += 1
+            return True
+        return False
 
-    def getPos(self, x, y):
-        return (self.board[y * BOARD_MAX_X + x].getVal())
+    def get_pos(self, x_pos, y_pos):
+        """Get Array position from x and y"""
+        return self.board[y_pos * BOARD_MAX_X + x_pos].get_val()
 
-    def fire(self, x, y):
-        i = x + (y * BOARD_MAX_Y)
-        if (self.board[i].isEmpty):
-            self.board[i] = Boom(x, y)
-            return (FIRE_MISSED)
+    def fire(self, x_pos, y_pos):
+        """Fire shot on board for position X and Y"""
+        i = x_pos + (y_pos * BOARD_MAX_Y)
+        if self.board[i].is_empty:
+            self.board[i] = Boom(x_pos, y_pos)
+            return FIRE_MISSED
         else:
-            if (self.board[i].isHit):
-                return (FIRE_DOUBLE)
+            if self.board[i].is_hit:
+                return FIRE_DOUBLE
             else:
-                self.board[i].isHit = True
-                self.shipCount -= 1
-                return (FIRE_HIT)
+                self.board[i].is_hit = True
+                self.ship_count -= 1
+                return FIRE_HIT
 
     def show(self):
         print("  0 1 2 3 4 5 6 7")
-        for y in range(BOARD_MAX_Y):
-            line = str(y) + " "
-            for x in range(BOARD_MAX_X):
-                val = self.getPos(x, y)
-                if (self.isComputer and val == 'X'):
+        for y_pos in range(BOARD_MAX_Y):
+            line = str(y_pos) + " "
+            for x_pos in range(BOARD_MAX_X):
+                val = self.get_pos(x_pos, y_pos)
+                if (self.is_computer and val == 'X'):
                     val = '.'
                 line += val + " "
             print(line)
+
 class Game():
     def __init__(self):
         name = input("Enter your name: ")
-        self.playerBoard = Board(name)
-        self.computerBoard = Board('Computer')
+        self.plyer_board = Board(name)
+        self.computer_board = Board('Computer')
 
     def show(self):
-        print(f"{self.playerBoard.name} Board:")
-        self.playerBoard.show()
-        print(f"{self.computerBoard.name} Board:")
-        self.computerBoard.show()
+        print(f"{self.plyer_board.name} Board:")
+        self.plyer_board.show()
+        print(f"{self.computer_board.name} Board:")
+        self.computer_board.show()
 
-    def playerShipPlacement(self):
+    def player_ship_placement(self):
         i = 0
-        while(True):
+        while True:
             print("Please place your ships: ")
-            self.playerBoard.show()
+            self.plyer_board.show()
             print(f"Ship {i+1} of {MAX_SHIPS}")
             try:
-                x = int(input("X = "))
-                if (x >= BOARD_MAX_X or x < 0):
+                x_pos = int(input("X = "))
+                if (x_pos >= BOARD_MAX_X or x_pos < 0):
                     print("Out of range value")
                     continue
-                y = int(input("Y = "))
-                if (y >= BOARD_MAX_Y or y < 0):
+                y_pos = int(input("Y = "))
+                if (y_pos >= BOARD_MAX_Y or y_pos < 0):
                     print("Out of range value")
                     continue
             except ValueError:
                 print("Incorrect value should be a number")
                 continue
-            ret = self.playerBoard.addShip(x, y)
-            if (not ret):
+            ret = self.plyer_board.add_ship(x_pos, y_pos)
+            if not ret:
                 print("Ship already there")
                 continue
             i += 1
-            if (i >= MAX_SHIPS):
+            if i >= MAX_SHIPS:
                 break
 
-    def playerFire(self):
-        while(True):
+    def player_fire(self):
+        while True:
             print("Fire your cannon: ")
             try:
-                x = int(input("X = "))
-                if (x >= BOARD_MAX_X or x < 0):
+                x_pos = int(input("X = "))
+                if (x_pos >= BOARD_MAX_X or x_pos < 0):
                     print("Out of range value")
                     continue
-                y = int(input("Y = "))
-                if (y >= BOARD_MAX_Y or y < 0):
+                y_pos = int(input("Y = "))
+                if (y_pos >= BOARD_MAX_Y or y_pos < 0):
                     print("Out of range value")
                     continue
             except ValueError:
                 print("Incorrect value should be a number")
                 continue
 
-            ret = self.computerBoard.fire(x, y)
+            ret = self.computer_board.fire(x_pos, y_pos)
 
-            if (ret == FIRE_MISSED):
-                print(f"{self.playerBoard.name} Missed BOOM")
+            if ret == FIRE_MISSED:
+                print(f"{self.plyer_board.name} Miied BOOM")
                 return
-            elif (ret == FIRE_HIT):
-                print(f"{self.playerBoard.name} Hit Bang")
+            elif ret == FIRE_HIT:
+                print(f"{self.plyer_board.name} Hit Bang")
                 return
             else:
                 print("Double hit.....")
                 continue
 
-    def computerFire(self):
-        while (True):
-            ss = random.randint(0, ((BOARD_MAX_X*BOARD_MAX_Y)-1))
-            x = ss % BOARD_MAX_Y
-            y = ss // BOARD_MAX_Y
-            ret = self.playerBoard.fire(x, y)
-            if (ret == FIRE_MISSED):
-                print("Computer Missed BOOM")
+    def computer_fire(self):
+        while True:
+            i = random.randint(0, ((BOARD_MAX_X*BOARD_MAX_Y)-1))
+            x_pos = i % BOARD_MAX_Y
+            y_pos = i // BOARD_MAX_Y
+            ret = self.plyer_board.fire(x_pos, y_pos)
+            if ret == FIRE_MISSED:
+                print("Computer Miied BOOM")
                 return
-            elif (ret == FIRE_HIT):
+            elif ret == FIRE_HIT:
                 print("Computer Hit Bang")
                 return
             else:
@@ -184,17 +195,17 @@ def main():
     print("- = *       Battleship      * = -")
     print("=================================")
 
-    myGame = Game()
-    myGame.playerShipPlacement()
-    while(True):
+    my_game = Game()
+    my_game.player_ship_placement()
+    while True:
         print("------------------------------------------------")
-        myGame.show()
-        myGame.playerFire()
-        if (myGame.computerBoard.shipCount <= 0):
+        my_game.show()
+        my_game.player_fire()
+        if my_game.computer_board.ship_count <= 0:
             print("Player Wins!!!!")
             break
-        myGame.computerFire()
-        if (myGame.playerBoard.shipCount <= 0):
+        my_game.computer_fire()
+        if my_game.plyer_board.ship_count <= 0:
             print("Computer Wins!!!!")
             break
 
