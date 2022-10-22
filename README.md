@@ -79,4 +79,3 @@ The Game is deployed using Code Institute's mock terminal for Heroku.
 # Credits
 - Code Institute for deployment terminal
 - Wikipedia for Battleship gameplay
-- 
