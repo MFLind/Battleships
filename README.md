@@ -33,9 +33,12 @@ The first opponent that sink all the ships wins.
 - Checks for if shooting on same positions
 - Object oriented code with inheritance of child classes
 - Board size and number of ships are defined in variables
+
 # Future improvement
 - Player can select the size of the playfield
 - Implementation of score
 - Make it possible for ships to be other sizes that 1 x 1 character
 
-# 
+# Data model
+
+
