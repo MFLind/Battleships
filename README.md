@@ -33,12 +33,50 @@ The first opponent that sink all the ships wins.
 - Checks for if shooting on same positions
 - Object oriented code with inheritance of child classes
 - Board size and number of ships are defined in variables
+- For generating computer placement using random.sample() getting all ships placement in one line.
 
-# Future improvement
+## Future improvement
 - Player can select the size of the playfield
 - Implementation of score
 - Make it possible for ships to be other sizes that 1 x 1 character
 
 # Data model
+The design is using classes to represent the BoardCell that get instancated either as empty, ship or BOOM.
 
+<img width="426" alt="image" src="https://user-images.githubusercontent.com/106115510/197336737-cf53caf6-6304-4832-9f3f-1abf9c42c53b.png">
 
+The main object is based on the Game class that holds a instance of Board class that has a array that represent that game field, the Board class has methods for setting and getting the X and Y coordinates that convert it to the array index.
+
+The Game class has method to help the game flow for player placement of ships  player_ship_placement(). For shooting there is help function for player_fire() and computer_fire().
+
+The Board class has helper function for printing the playfield show().
+
+# Testing
+
+I have done manual testing with the following methods:
+- Running thru pylint for PEP8 validation and getting no errors
+- Test playing the game both locally on my command prompt and also on Heroku: https://battleships-3.herokuapp.com/
+- Testing inputs with both incorrect values and correct values
+
+## Bugs
+The development was done iterative and testing and finding bugs occure during the coding process.
+
+## Remaining bugs
+All KNOWN bugs are fixed.
+
+## Validator Testing
+- PEP8 via pylint locally on my computer
+
+## Deployment
+The Game is deployed using Code Institute's mock terminal for Heroku.
+- Steps
+  - For or clone this repository
+  - Create a new Heroku app
+  - Set the buildpacks to to Python and NodeJS in that order
+  - Link the Heroku app to the directory
+  - Click on **Deploy**
+
+# Credits
+- Code Institute for deployment terminal
+- Wikipedia for Battleship gameplay
+- 
