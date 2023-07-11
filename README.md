@@ -55,7 +55,7 @@ The Board class has helper function for printing the playfield show().
 
 I have done manual testing with the following methods:
 - Running thru pylint for PEP8 validation and getting no errors
-- Test playing the game both locally on my command prompt and also on Heroku: https://battleships-3.herokuapp.com/
+- Test playing the game both locally on my command prompt and also on Heroku: [https://battleships-3.herokuapp.com/](https://battleship-mflind-58a7fc68f4fb.herokuapp.com/)
 - Testing inputs with both incorrect values and correct values
 
 ## Bugs
